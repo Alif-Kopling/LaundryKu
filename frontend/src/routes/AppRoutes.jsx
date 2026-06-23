@@ -3,6 +3,7 @@ import ProtectedRoute from "@/components/ProtectedRoute"
 import DashboardLayout from "@/layouts/DashboardLayout"
 import Login from "@/pages/Login"
 import Register from "@/pages/Register"
+import Dashboard from "@/pages/Dashboard"
 
 export default function AppRoutes() {
   return (
@@ -16,7 +17,7 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        <Route path="/" element={<div>Dashboard</div>} />
+        <Route path="/" element={<Dashboard />} />
         <Route path="/customers" element={<div>Pelanggan</div>} />
         <Route path="/transactions" element={<div>Transaksi</div>} />
         <Route path="/invoice" element={<div>Invoice</div>} />
