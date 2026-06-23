@@ -1,10 +1,7 @@
 
 <p align="center">
-  <img src="frontend/public/assets/logo-app.png" width="240" alt="LaundryKu Logo">
+  <img src="frontend/public/assets/logo-app.png" width="420" alt="LaundryKu Logo">
 </p>
-
-<h1 align="center">🧺 LaundryKu</h1>
-
 <p align="center">
   <b>Sistem Manajemen Laundry Digital</b><br>
   Aplikasi untuk membantu usaha laundry mengelola pelanggan, transaksi, status cucian, nota, dan riwayat transaksi secara lebih mudah.
