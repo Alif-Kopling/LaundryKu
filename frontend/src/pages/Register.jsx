@@ -43,7 +43,7 @@ export default function Register() {
           <img
             src="/assets/logo-app.png"
             alt="LaundryKu"
-            className="w-50 h-50"
+            className="w-72 h-72"
           />
         </div>
         <Card>
