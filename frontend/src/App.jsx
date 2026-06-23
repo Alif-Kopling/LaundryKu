@@ -1,7 +1,15 @@
+import { BrowserRouter } from "react-router-dom"
+import { Toaster } from "sonner"
+import { AuthProvider } from "@/contexts/AuthContext"
+import AppRoutes from "@/routes/AppRoutes"
+
 export default function App() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <h1 className="text-2xl font-semibold">LaundryKu</h1>
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRoutes />
+        <Toaster position="top-right" richColors />
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
