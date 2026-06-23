@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Outlet, useNavigate, useLocation } from "react-router-dom"
 import { useAuth } from "@/contexts/AuthContext"
 import { Button } from "@/components/ui/button"
@@ -20,6 +20,8 @@ import {
   LogOut,
   Menu,
   X,
+  Moon,
+  Sun,
 } from "lucide-react"
 
 const navItems = [
@@ -35,6 +37,24 @@ export default function DashboardLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [dark, setDark] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("theme") === "dark" ||
+        (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches)
+    }
+    return false
+  })
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (dark) {
+      root.classList.add("dark")
+      localStorage.setItem("theme", "dark")
+    } else {
+      root.classList.remove("dark")
+      localStorage.setItem("theme", "light")
+    }
+  }, [dark])
 
   function handleLogout() {
     logout()
@@ -87,7 +107,14 @@ export default function DashboardLayout() {
           })}
         </nav>
 
-        <div className="border-t p-4 mt-auto">
+        <div className="border-t p-4 mt-auto space-y-2">
+          <button
+            onClick={() => setDark(!dark)}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+          >
+            {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {dark ? "Terang" : "Gelap"}
+          </button>
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-destructive hover:bg-destructive/10 transition-colors"
