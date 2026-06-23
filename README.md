@@ -1,4 +1,4 @@
-
+![Status](https://img.shields.io/badge/status-development-yellow)
 <p align="center">
   <img src="frontend/public/assets/logo-app.png" width="350" alt="LaundryKu Logo">
 </p>
