@@ -6,6 +6,7 @@ require('dotenv').config();
 const swaggerSpec = require('./config/swagger');
 const errorHandler = require('./middlewares/errorHandler');
 const authRoutes = require('./routes/auth');
+const customerRoutes = require('./routes/customers');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/customers', customerRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Laundry Management API' });
