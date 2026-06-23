@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnR1djhwejd3M3Nlazl4MHBxZnV5YXA3Y3RkM3N6YmNlMnc3NGk2ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/l3vR1v4PSC1i4x7VW/giphy.gif" width="120" alt="Laundry Animation">
+  <img src="frontend/public/assets/logo-app.png" width="240" alt="LaundryKu Logo">
 </p>
 
 <h1 align="center">🧺 LaundryKu</h1>
