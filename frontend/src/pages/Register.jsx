@@ -43,14 +43,8 @@ export default function Register() {
           <img
             src="/assets/logo-app.png"
             alt="LaundryKu"
-            className="w-16 h-16"
+            className="w-50 h-50"
           />
-          <div className="text-center">
-            <h1 className="text-xl font-bold">LaundryKu</h1>
-            <p className="text-sm text-muted-foreground">
-              Kelola laundry dengan mudah
-            </p>
-          </div>
         </div>
         <Card>
         <CardHeader className="text-center">
