@@ -20,7 +20,6 @@ import {
   LogOut,
   Menu,
   X,
-  Shirt,
 } from "lucide-react"
 
 const navItems = [
@@ -54,11 +53,14 @@ export default function DashboardLayout() {
       <aside
         className={`${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } fixed inset-y-0 left-0 z-50 w-64 bg-card border-r transition-transform lg:translate-x-0 lg:static lg:z-auto`}
+        } fixed inset-y-0 left-0 z-50 w-64 bg-card border-r transition-transform lg:translate-x-0 lg:static lg:z-auto flex flex-col`}
       >
-        <div className="flex items-center gap-2 px-6 h-16 border-b">
-          <Shirt className="w-6 h-6 text-primary" />
-          <span className="font-semibold text-lg">LaundryKu</span>
+        <div className="flex items-center px-6 h-16 border-b">
+          <img
+            src="/assets/logo-app.png"
+            alt="LaundryKu"
+            className="h-8 w-auto"
+          />
         </div>
 
         <nav className="p-4 space-y-1">
@@ -84,6 +86,16 @@ export default function DashboardLayout() {
             )
           })}
         </nav>
+
+        <div className="border-t p-4 mt-auto">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-destructive hover:bg-destructive/10 transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+            Keluar
+          </button>
+        </div>
       </aside>
 
       {sidebarOpen && (
