@@ -8,14 +8,26 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React">
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite">
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind">
-  <img src="https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white" alt="shadcn/ui">
-  <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="Axios">
-  <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white" alt="React Router">
-</p>
+  <img src="https://img.shields.io/badge/React.js-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white" />
+  <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white" />
+  <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white" />
+  <img src="https://img.shields.io/badge/Lucide_React-F56565?style=for-the-badge&logo=lucide&logoColor=white" />
+  <img src="https://img.shields.io/badge/Sonner-000000?style=for-the-badge&logo=sonner&logoColor=white" />
 
+  <br/>
+
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" />
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
+  <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" />
+  <img src="https://img.shields.io/badge/bcryptjs-338833?style=for-the-badge&logo=node.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" />
+  <img src="https://img.shields.io/badge/Nodemon-76D04B?style=for-the-badge&logo=nodemon&logoColor=white" />
+  <img src="https://img.shields.io/badge/dotenv-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black" />
+</p>
 ---
 
 ## 📌 Tentang Project
@@ -163,30 +175,129 @@ LaundryKu
 
 ## 🚀 Instalasi
 
-### Clone Repository
+### 1. Clone Repository
+
 ```bash
 git clone https://github.com/Alif-Kopling/LaundryKu.git
 cd LaundryKu
 ```
 
-### Frontend Setup
+---
+
+## 🎨 Frontend Setup
+
+Masuk ke folder frontend:
+
 ```bash
 cd frontend
+```
+
+Install dependency:
+
+```bash
 npm install
+```
+
+Jalankan frontend:
+
+```bash
 npm run dev
 ```
-Frontend berjalan di **`http://localhost:5173`**
 
-### Backend Setup
+Frontend berjalan pada:
+
+```bash
+http://localhost:5173
+```
+
+---
+
+## ⚙️ Backend Setup
+
+Buka terminal baru, lalu masuk ke folder backend:
+
 ```bash
 cd backend
-composer install          # Laravel
-cp .env.example .env
-php artisan key:generate
-php artisan migrate
-php artisan serve
 ```
-Backend berjalan di **`http://localhost:8000`**
+
+Install dependency:
+
+```bash
+npm install
+```
+
+Buat file environment:
+
+```bash
+cp .env.example .env
+```
+
+Konfigurasi database pada file `.env`:
+
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=laundryku
+
+JWT_SECRET=your_secret_key
+```
+
+---
+
+## 🗄️ Database Setup
+
+Pastikan MySQL sudah berjalan.
+
+Buat database:
+
+```sql
+CREATE DATABASE laundryku;
+```
+
+Import database:
+
+```bash
+mysql -u root -p laundryku < database.sql
+```
+
+---
+
+## ▶️ Menjalankan Backend
+
+Jalankan server backend:
+
+```bash
+npm run dev
+```
+
+Backend berjalan pada:
+
+```bash
+http://localhost:5000
+```
+
+---
+
+## 💻 Menjalankan Full Project
+
+Buka 2 terminal:
+
+Terminal 1 (Frontend):
+
+```bash
+cd frontend
+npm run dev
+```
+
+Terminal 2 (Backend):
+
+```bash
+cd backend
+npm run dev
+```
+
+Aplikasi siap digunakan 🚀
 
 ---
 
