@@ -1,12 +1,7 @@
-import { BrowserRouter } from "react-router-dom"
-import { Toaster } from "sonner"
-import AppRoutes from "@/routes/AppRoutes"
-
 export default function App() {
   return (
-    <BrowserRouter>
-      <AppRoutes />
-      <Toaster position="top-right" richColors />
-    </BrowserRouter>
+    <div className="flex items-center justify-center min-h-screen">
+      <h1 className="text-2xl font-semibold">LaundryKu</h1>
+    </div>
   )
 }
