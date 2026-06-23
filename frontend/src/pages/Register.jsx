@@ -38,8 +38,8 @@ export default function Register() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-muted/30 px-4">
-      <div className="w-full max-w-sm space-y-6">
-        <div className="flex flex-col items-center gap-3">
+      <div className="w-full max-w-sm space-y-2">
+        <div className="flex flex-col items-center">
           <img
             src="/assets/logo-app.png"
             alt="LaundryKu"
