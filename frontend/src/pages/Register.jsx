@@ -38,7 +38,21 @@ export default function Register() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-muted/30 px-4">
-      <Card className="w-full max-w-sm">
+      <div className="w-full max-w-sm space-y-6">
+        <div className="flex flex-col items-center gap-3">
+          <img
+            src="/assets/logo-app.png"
+            alt="LaundryKu"
+            className="w-16 h-16"
+          />
+          <div className="text-center">
+            <h1 className="text-xl font-bold">LaundryKu</h1>
+            <p className="text-sm text-muted-foreground">
+              Kelola laundry dengan mudah
+            </p>
+          </div>
+        </div>
+        <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Daftar</CardTitle>
           <CardDescription>Buat akun LaundryKu baru</CardDescription>
@@ -91,6 +105,7 @@ export default function Register() {
           </p>
         </CardContent>
       </Card>
+      </div>
     </div>
   )
 }
