@@ -43,7 +43,7 @@ async function seed() {
       (?, 'LND-0006', 'Cuci Kering', 3.0, 8000, 24000, 'finished', '', NOW()),
       (?, 'LND-0007', 'Cuci Kering', 6.0, 8000, 48000, 'received', 'Boneka besar 1 pcs', NOW()),
       (?, 'LND-0008', 'Cuci Kering', 2.5, 8000, 20000, 'processing', '', NOW())
-    `, customers.map(c => c.id).slice(0, 8));
+    `, (() => { const ids = customers.map(c => c.id); return Array.from({ length: 8 }, (_, i) => ids[i % ids.length]); })());
 
     console.log('Seed data berhasil ditambahkan!');
     console.log('Login: admin@laundry.com / admin123');
