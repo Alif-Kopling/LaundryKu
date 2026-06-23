@@ -30,7 +30,7 @@ export default function Register() {
       await register(email, password, name)
       navigate("/")
     } catch (err) {
-      setError(err.message)
+      setError(err.response?.data?.message || err.message)
     } finally {
       setLoading(false)
     }

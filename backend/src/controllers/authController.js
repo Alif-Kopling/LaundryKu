@@ -33,6 +33,40 @@ exports.login = async (req, res, next) => {
   }
 };
 
+exports.register = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'name, email, and password are required' });
+    }
+
+    const [existing] = await pool.query('SELECT id FROM users WHERE email = ?', [email]);
+    if (existing.length > 0) {
+      return res.status(409).json({ message: 'Email already registered' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const [result] = await pool.query(
+      'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
+      [name, email, hashedPassword, 'karyawan']
+    );
+
+    const token = jwt.sign(
+      { id: result.insertId, name, role: 'karyawan' },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+    );
+
+    res.status(201).json({
+      message: 'Register success',
+      token,
+      user: { id: result.insertId, name, role: 'karyawan' }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.logout = async (req, res) => {
   res.json({ message: 'Logout success' });
 };

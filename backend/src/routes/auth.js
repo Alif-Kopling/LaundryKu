@@ -27,6 +27,31 @@ router.post('/login', authController.login);
 
 /**
  * @swagger
+ * /auth/register:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Register new user (karyawan)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Register success
+ */
+router.post('/register', authController.register);
+
+/**
+ * @swagger
  * /auth/logout:
  *   post:
  *     tags: [Auth]

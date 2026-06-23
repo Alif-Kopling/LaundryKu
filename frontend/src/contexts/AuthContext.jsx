@@ -20,12 +20,13 @@ export function AuthProvider({ children }) {
   }, [])
 
   const register = useCallback(async (email, password, name) => {
-    const userData = { id: Date.now(), name, email }
-    localStorage.setItem("token", "mock-jwt-token")
-    localStorage.setItem("user", JSON.stringify(userData))
-    setUser(userData)
+    const data = await authService.register(email, password, name)
 
-    return userData
+    localStorage.setItem("token", data.token)
+    localStorage.setItem("user", JSON.stringify(data.user))
+    setUser(data.user)
+
+    return data.user
   }, [])
 
   const logout = useCallback(() => {
