@@ -8,6 +8,7 @@ const errorHandler = require('./middlewares/errorHandler');
 const authRoutes = require('./routes/auth');
 const customerRoutes = require('./routes/customers');
 const transactionRoutes = require('./routes/transactions');
+const invoiceRoutes = require('./routes/invoice');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +21,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/customers', customerRoutes);
 app.use('/api/v1/transactions', transactionRoutes);
+app.use('/api/v1/transactions/:id/invoice', invoiceRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Laundry Management API' });
