@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="frontend/public/assets/logo-app.png" width="420" alt="LaundryKu Logo">
+  <img src="frontend/public/assets/logo-app.png" width="350" alt="LaundryKu Logo">
 </p>
 <p align="center">
   <b>Sistem Manajemen Laundry Digital</b><br>
