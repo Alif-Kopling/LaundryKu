@@ -4,6 +4,7 @@ import DashboardLayout from "@/layouts/DashboardLayout"
 import Login from "@/pages/Login"
 import Register from "@/pages/Register"
 import Dashboard from "@/pages/Dashboard"
+import Customers from "@/pages/Customers"
 
 export default function AppRoutes() {
   return (
@@ -18,7 +19,7 @@ export default function AppRoutes() {
         }
       >
         <Route path="/" element={<Dashboard />} />
-        <Route path="/customers" element={<div>Pelanggan</div>} />
+        <Route path="/customers" element={<Customers />} />
         <Route path="/transactions" element={<div>Transaksi</div>} />
         <Route path="/invoice" element={<div>Invoice</div>} />
         <Route path="/history" element={<div>Riwayat</div>} />
