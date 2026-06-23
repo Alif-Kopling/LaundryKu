@@ -5,6 +5,7 @@ import Login from "@/pages/Login"
 import Register from "@/pages/Register"
 import Dashboard from "@/pages/Dashboard"
 import Customers from "@/pages/Customers"
+import Transactions from "@/pages/Transactions"
 
 export default function AppRoutes() {
   return (
@@ -20,7 +21,7 @@ export default function AppRoutes() {
       >
         <Route path="/" element={<Dashboard />} />
         <Route path="/customers" element={<Customers />} />
-        <Route path="/transactions" element={<div>Transaksi</div>} />
+        <Route path="/transactions" element={<Transactions />} />
         <Route path="/invoice" element={<div>Invoice</div>} />
         <Route path="/history" element={<div>Riwayat</div>} />
       </Route>
