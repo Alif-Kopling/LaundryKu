@@ -52,11 +52,6 @@ export default function Login() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-md">
-                {error}
-              </div>
-            )}
             <div className="space-y-2">
               <label className="text-sm font-medium">Username</label>
               <Input
@@ -87,6 +82,11 @@ export default function Login() {
               Daftar
             </Link>
           </p>
+          {error && (
+            <div className="mt-4 text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-md text-center">
+              {error}
+            </div>
+          )}
         </CardContent>
       </Card>
       </div>
