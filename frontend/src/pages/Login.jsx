@@ -42,7 +42,7 @@ export default function Login() {
           <img
             src="/assets/logo-app.png"
             alt="LaundryKu"
-            className="w-72 h-72"
+            className="w-72 h-40"
           />
         </div>
         <Card>
