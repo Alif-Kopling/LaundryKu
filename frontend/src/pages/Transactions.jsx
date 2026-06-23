@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -35,6 +35,8 @@ import {
   Eye,
   ChevronRight,
 } from "lucide-react"
+import * as transactionService from "@/services/transactionService"
+import * as customerService from "@/services/customerService"
 
 const PRICE_PER_KG = 8000
 
@@ -58,32 +60,54 @@ const nextStatus = {
   finished: "picked_up",
 }
 
-function getTransactions() {
-  return JSON.parse(localStorage.getItem("transactions") || "[]")
-}
-
-function saveTransactions(transactions) {
-  localStorage.setItem("transactions", JSON.stringify(transactions))
-}
-
-function getCustomers() {
-  return JSON.parse(localStorage.getItem("customers") || "[]")
-}
-
 const emptyForm = {
   customerId: "",
   weight: "",
   notes: "",
 }
 
+function mapTransaction(t) {
+  return {
+    id: t.id,
+    invoice: t.invoice_number,
+    customerId: t.customer_id,
+    customerName: t.customer_name,
+    customerPhone: t.customer_phone,
+    weight: Number(t.weight),
+    pricePerKg: Number(t.price_per_kg),
+    total: Number(t.total_price),
+    status: t.status,
+    notes: t.notes,
+    createdAt: t.created_at,
+    updatedAt: t.updated_at,
+  }
+}
+
 export default function Transactions() {
-  const [transactions, setTransactions] = useState(getTransactions)
+  const [transactions, setTransactions] = useState([])
+  const [customers, setCustomers] = useState([])
   const [search, setSearch] = useState("")
   const [createOpen, setCreateOpen] = useState(false)
   const [form, setForm] = useState(emptyForm)
   const [detailId, setDetailId] = useState(null)
 
-  const customers = useMemo(() => getCustomers(), [createOpen])
+  useEffect(() => {
+    transactionService.getTransactions()
+      .then((data) => setTransactions(data.map(mapTransaction)))
+      .catch(() => toast.error("Gagal memuat transaksi"))
+
+    customerService.getCustomers()
+      .then(setCustomers)
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    if (createOpen) {
+      customerService.getCustomers()
+        .then(setCustomers)
+        .catch(() => {})
+    }
+  }, [createOpen])
 
   const filtered = useMemo(() => {
     if (!search.trim()) return transactions
@@ -101,55 +125,63 @@ export default function Transactions() {
 
   const total = PRICE_PER_KG * (Number(form.weight) || 0)
 
-  function handleCreate() {
+  async function handleCreate() {
     if (!form.customerId || !form.weight) {
       toast.error("Pilih pelanggan dan masukkan berat")
       return
     }
 
-    const customer = customers.find(
-      (c) => String(c.id) === form.customerId
-    )
-    if (!customer) {
-      toast.error("Pelanggan tidak ditemukan")
-      return
+    try {
+      const data = await transactionService.createTransaction({
+        customer_id: Number(form.customerId),
+        weight: Number(form.weight),
+        price_per_kg: PRICE_PER_KG,
+        notes: form.notes || "",
+      })
+
+      const customer = customers.find((c) => String(c.id) === form.customerId)
+
+      const newTransaction = {
+        id: data.id,
+        invoice: data.invoice_number,
+        customerId: data.customer_id,
+        customerName: customer?.name || "",
+        customerPhone: customer?.phone || "",
+        weight: Number(data.weight),
+        pricePerKg: Number(data.price_per_kg),
+        total: Number(data.total_price),
+        status: data.status,
+        notes: data.notes || "",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }
+
+      setTransactions((prev) => [newTransaction, ...prev])
+      setCreateOpen(false)
+      setForm(emptyForm)
+      toast.success(`Transaksi ${data.invoice_number} berhasil dibuat`)
+    } catch {
+      toast.error("Gagal membuat transaksi")
     }
-
-    const count = getTransactions().length + 1
-    const invoice = `LND-${String(count).padStart(4, "0")}`
-
-    const transaction = {
-      id: Date.now(),
-      invoice,
-      customerId: customer.id,
-      customerName: customer.name,
-      customerPhone: customer.phone,
-      weight: Number(form.weight),
-      pricePerKg: PRICE_PER_KG,
-      total,
-      status: "received",
-      notes: form.notes || "",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }
-
-    const updated = [...getTransactions(), transaction]
-    saveTransactions(updated)
-    setTransactions(updated)
-    setCreateOpen(false)
-    setForm(emptyForm)
-    toast.success(`Transaksi ${invoice} berhasil dibuat`)
   }
 
-  function handleUpdateStatus(id) {
-    const updated = getTransactions().map((t) => {
-      if (t.id !== id) return t
-      const next = nextStatus[t.status]
-      if (!next) return t
-      return { ...t, status: next, updatedAt: new Date().toISOString() }
-    })
-    saveTransactions(updated)
-    setTransactions(updated)
+  async function handleUpdateStatus(id) {
+    const t = transactions.find((tx) => tx.id === id)
+    if (!t) return
+
+    const next = nextStatus[t.status]
+    if (!next) return
+
+    try {
+      await transactionService.updateTransactionStatus(id, next)
+      setTransactions((prev) =>
+        prev.map((tx) =>
+          tx.id === id ? { ...tx, status: next, updatedAt: new Date().toISOString() } : tx
+        )
+      )
+    } catch {
+      toast.error("Gagal memperbarui status")
+    }
   }
 
   const detail = transactions.find((t) => t.id === detailId) || null

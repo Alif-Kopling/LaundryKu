@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -21,6 +21,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Search, Eye, X, Calendar } from "lucide-react"
+import * as transactionService from "@/services/transactionService"
 
 const statusLabels = {
   received: "Diterima",
@@ -29,52 +30,53 @@ const statusLabels = {
   picked_up: "Diambil",
 }
 
-function getTransactions() {
-  return JSON.parse(localStorage.getItem("transactions") || "[]")
+function mapTransaction(t) {
+  return {
+    id: t.id,
+    invoice: t.invoice_number,
+    customerName: t.customer_name,
+    customerPhone: t.customer_phone,
+    weight: Number(t.weight),
+    pricePerKg: Number(t.price_per_kg),
+    total: Number(t.total_price),
+    status: t.status,
+    notes: t.notes,
+    createdAt: t.created_at,
+    updatedAt: t.updated_at,
+  }
 }
 
 export default function History() {
-  const [transactions] = useState(getTransactions)
+  const [transactions, setTransactions] = useState([])
   const [search, setSearch] = useState("")
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
   const [detailId, setDetailId] = useState(null)
 
-  const filtered = useMemo(() => {
-    let result = [...transactions]
+  useEffect(() => {
+    loadHistory()
+  }, [])
 
-    result.sort(
-      (a, b) =>
-        new Date(b.createdAt) - new Date(a.createdAt)
-    )
+  async function loadHistory(searchTerm, start, end) {
+    try {
+      const params = {}
+      if (searchTerm) params.search = searchTerm
+      if (start) params.start_date = start
+      if (end) params.end_date = end
 
-    if (search.trim()) {
-      const q = search.toLowerCase()
-      result = result.filter(
-        (t) =>
-          t.invoice?.toLowerCase().includes(q) ||
-          t.customerName?.toLowerCase().includes(q)
-      )
+      const data = await transactionService.getHistory(params)
+      setTransactions(data.map(mapTransaction))
+    } catch {
+      // silent
     }
+  }
 
-    if (startDate) {
-      const start = new Date(startDate)
-      start.setHours(0, 0, 0, 0)
-      result = result.filter(
-        (t) => new Date(t.createdAt) >= start
-      )
-    }
-
-    if (endDate) {
-      const end = new Date(endDate)
-      end.setHours(23, 59, 59, 999)
-      result = result.filter(
-        (t) => new Date(t.createdAt) <= end
-      )
-    }
-
-    return result
-  }, [transactions, search, startDate, endDate])
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadHistory(search, startDate, endDate)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [search, startDate, endDate])
 
   const detail = transactions.find((t) => t.id === detailId) || null
 
@@ -152,7 +154,7 @@ export default function History() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.length === 0 ? (
+            {transactions.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={7}
@@ -164,7 +166,7 @@ export default function History() {
                 </TableCell>
               </TableRow>
             ) : (
-              filtered.map((t) => (
+              transactions.map((t) => (
                 <TableRow key={t.id}>
                   <TableCell className="font-mono text-xs font-medium">
                     {t.invoice}
