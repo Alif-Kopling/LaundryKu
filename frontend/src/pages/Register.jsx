@@ -14,7 +14,7 @@ import { UserPlus } from "lucide-react"
 
 export default function Register() {
   const [name, setName] = useState("")
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -27,7 +27,7 @@ export default function Register() {
     setLoading(true)
 
     try {
-      await register(username, password, name)
+      await register(email, password, name)
       navigate("/")
     } catch (err) {
       setError(err.message)
@@ -68,11 +68,12 @@ export default function Register() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Username</label>
+              <label className="text-sm font-medium">Email</label>
               <Input
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="email@domain.com"
+                type="email"
                 required
               />
             </div>

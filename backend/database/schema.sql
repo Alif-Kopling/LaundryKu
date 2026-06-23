@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   price_per_kg DECIMAL(10,2) NOT NULL,
   total_price DECIMAL(10,2) NOT NULL,
   status ENUM('received', 'processing', 'finished', 'picked_up') NOT NULL DEFAULT 'received',
+  notes TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE

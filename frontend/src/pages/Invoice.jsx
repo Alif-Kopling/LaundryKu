@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -12,6 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Printer, Search, FileText, Shirt } from "lucide-react"
+import * as transactionService from "@/services/transactionService"
 
 const statusLabels = {
   received: "Diterima",
@@ -20,14 +21,32 @@ const statusLabels = {
   picked_up: "Diambil",
 }
 
-function getTransactions() {
-  return JSON.parse(localStorage.getItem("transactions") || "[]")
+function mapTransaction(t) {
+  return {
+    id: t.id,
+    invoice: t.invoice_number,
+    customerName: t.customer_name,
+    customerPhone: t.customer_phone,
+    weight: Number(t.weight),
+    pricePerKg: Number(t.price_per_kg),
+    total: Number(t.total_price),
+    status: t.status,
+    notes: t.notes,
+    createdAt: t.created_at,
+    updatedAt: t.updated_at,
+  }
 }
 
 export default function Invoice() {
-  const [transactions, setTransactions] = useState(getTransactions)
+  const [transactions, setTransactions] = useState([])
   const [search, setSearch] = useState("")
   const [selectedId, setSelectedId] = useState(null)
+
+  useEffect(() => {
+    transactionService.getTransactions()
+      .then((data) => setTransactions(data.map(mapTransaction)))
+      .catch(() => {})
+  }, [])
 
   const filtered = useMemo(() => {
     if (!search.trim()) return transactions

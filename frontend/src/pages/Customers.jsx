@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,26 +19,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
 import { Plus, Pencil, Trash2, Search } from "lucide-react"
-
-function getCustomers() {
-  return JSON.parse(localStorage.getItem("customers") || "[]")
-}
-
-function saveCustomers(customers) {
-  localStorage.setItem("customers", JSON.stringify(customers))
-}
+import * as customerService from "@/services/customerService"
 
 const emptyForm = { name: "", phone: "", address: "" }
 
 export default function Customers() {
-  const [customers, setCustomers] = useState(getCustomers)
+  const [customers, setCustomers] = useState([])
   const [search, setSearch] = useState("")
   const [dialogOpen, setDialogOpen] = useState(false)
   const [form, setForm] = useState(emptyForm)
   const [editingId, setEditingId] = useState(null)
   const [deleteId, setDeleteId] = useState(null)
+
+  useEffect(() => {
+    customerService.getCustomers()
+      .then(setCustomers)
+      .catch(() => toast.error("Gagal memuat data pelanggan"))
+  }, [])
 
   const filtered = useMemo(() => {
     if (!search.trim()) return customers
@@ -46,7 +44,7 @@ export default function Customers() {
     return customers.filter(
       (c) =>
         c.name.toLowerCase().includes(q) ||
-        c.phone.includes(q)
+        (c.phone && c.phone.includes(q))
     )
   }, [customers, search])
 
@@ -57,44 +55,44 @@ export default function Customers() {
   }
 
   function openEdit(customer) {
-    setForm({ name: customer.name, phone: customer.phone, address: customer.address })
+    setForm({ name: customer.name, phone: customer.phone || "", address: customer.address || "" })
     setEditingId(customer.id)
     setDialogOpen(true)
   }
 
-  function handleSave() {
+  async function handleSave() {
     if (!form.name || !form.phone) {
       toast.error("Nama dan nomor telepon harus diisi")
       return
     }
 
-    let updated
-    if (editingId) {
-      updated = customers.map((c) =>
-        c.id === editingId ? { ...c, ...form } : c
-      )
-      toast.success("Pelanggan berhasil diperbarui")
-    } else {
-      const newCustomer = {
-        ...form,
-        id: Date.now(),
-        createdAt: new Date().toISOString(),
+    try {
+      if (editingId) {
+        await customerService.updateCustomer(editingId, form)
+        setCustomers((prev) =>
+          prev.map((c) => c.id === editingId ? { ...c, ...form } : c)
+        )
+        toast.success("Pelanggan berhasil diperbarui")
+      } else {
+        const created = await customerService.createCustomer(form)
+        setCustomers((prev) => [...prev, { ...form, id: created.id, created_at: new Date().toISOString() }])
+        toast.success("Pelanggan berhasil ditambahkan")
       }
-      updated = [...customers, newCustomer]
-      toast.success("Pelanggan berhasil ditambahkan")
+      setDialogOpen(false)
+    } catch {
+      toast.error("Gagal menyimpan pelanggan")
     }
-
-    saveCustomers(updated)
-    setCustomers(updated)
-    setDialogOpen(false)
   }
 
-  function handleDelete(id) {
-    const updated = customers.filter((c) => c.id !== id)
-    saveCustomers(updated)
-    setCustomers(updated)
-    setDeleteId(null)
-    toast.success("Pelanggan berhasil dihapus")
+  async function handleDelete(id) {
+    try {
+      await customerService.deleteCustomer(id)
+      setCustomers((prev) => prev.filter((c) => c.id !== id))
+      setDeleteId(null)
+      toast.success("Pelanggan berhasil dihapus")
+    } catch {
+      toast.error("Gagal menghapus pelanggan")
+    }
   }
 
   return (

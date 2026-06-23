@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useState, useEffect } from "react"
 import {
   Card,
   CardContent,
@@ -23,6 +23,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { Users, ClipboardList, CheckCircle, Clock, Eye } from "lucide-react"
+import * as transactionService from "@/services/transactionService"
 
 const statusLabels = {
   received: "Diterima",
@@ -38,69 +39,61 @@ const statusVariants = {
   picked_up: "ghost",
 }
 
-function getStats() {
-  const customers = JSON.parse(localStorage.getItem("customers") || "[]")
-  const transactions = JSON.parse(
-    localStorage.getItem("transactions") || "[]"
-  )
-
-  const activeTransactions = transactions.filter(
-    (t) => t.status !== "picked_up"
-  )
-  const completedToday = transactions.filter((t) => {
-    if (t.status !== "picked_up") return false
-    const today = new Date().toDateString()
-    const updated = new Date(t.updatedAt).toDateString()
-    return today === updated
-  })
-  const pendingPickup = transactions.filter(
-    (t) => t.status === "finished"
-  )
-
+function mapTransaction(t) {
   return {
-    totalCustomers: customers.length,
-    activeTransactions: activeTransactions.length,
-    completedToday: completedToday.length,
-    pendingPickup: pendingPickup.length,
+    id: t.id,
+    invoice: t.invoice_number,
+    customerName: t.customer_name,
+    customerPhone: t.customer_phone,
+    weight: Number(t.weight),
+    pricePerKg: Number(t.price_per_kg),
+    total: Number(t.total_price),
+    status: t.status,
+    notes: t.notes,
+    createdAt: t.created_at,
+    updatedAt: t.updated_at,
   }
 }
 
 export default function Dashboard() {
-  const stats = useMemo(() => getStats(), [])
+  const [stats, setStats] = useState({ total_customers: 0, active_transactions: 0, completed_today: 0, pending_pickup: 0 })
+  const [transactions, setTransactions] = useState([])
   const [detail, setDetail] = useState(null)
 
-  const transactions = useMemo(() => {
-    const data = JSON.parse(localStorage.getItem("transactions") || "[]")
-    return data
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-.slice(0, 7)
+  useEffect(() => {
+    transactionService.getDashboardStats()
+      .then((data) => {
+        setStats(data.stats)
+        setTransactions((data.recent_transactions || []).map(mapTransaction))
+      })
+      .catch(() => {})
   }, [])
 
   const cards = [
     {
       title: "Total Pelanggan",
-      value: stats.totalCustomers,
+      value: stats.total_customers,
       icon: Users,
       color: "text-chart-1",
       bg: "bg-chart-1/10",
     },
     {
       title: "Transaksi Aktif",
-      value: stats.activeTransactions,
+      value: stats.active_transactions,
       icon: ClipboardList,
       color: "text-chart-2",
       bg: "bg-chart-2/10",
     },
     {
       title: "Selesai Hari Ini",
-      value: stats.completedToday,
+      value: stats.completed_today,
       icon: CheckCircle,
       color: "text-chart-3",
       bg: "bg-chart-3/10",
     },
     {
       title: "Menunggu Diambil",
-      value: stats.pendingPickup,
+      value: stats.pending_pickup,
       icon: Clock,
       color: "text-chart-4",
       bg: "bg-chart-4/10",
