@@ -59,7 +59,7 @@ export default function DashboardLayout() {
           <img
             src="/assets/logo-app.png"
             alt="LaundryKu"
-            className="h-8 w-auto"
+            className="h-12 w-auto"
           />
         </div>
 
