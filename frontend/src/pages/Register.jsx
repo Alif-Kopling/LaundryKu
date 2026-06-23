@@ -1,0 +1,96 @@
+import { useState } from "react"
+import { useNavigate, Link } from "react-router-dom"
+import { useAuth } from "@/contexts/AuthContext"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { UserPlus } from "lucide-react"
+
+export default function Register() {
+  const [name, setName] = useState("")
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+  const { register } = useAuth()
+  const navigate = useNavigate()
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setError("")
+    setLoading(true)
+
+    try {
+      await register(username, password, name)
+      navigate("/")
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-muted/30 px-4">
+      <Card className="w-full max-w-sm">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl">Daftar</CardTitle>
+          <CardDescription>Buat akun LaundryKu baru</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-md">
+                {error}
+              </div>
+            )}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Nama</label>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Nama lengkap"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Username</label>
+              <Input
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="username"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Password</label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="******"
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+              <UserPlus className="w-4 h-4 mr-2" />
+              {loading ? "Memproses..." : "Daftar"}
+            </Button>
+          </form>
+          <p className="text-center text-sm text-muted-foreground mt-4">
+            Sudah punya akun?{" "}
+            <Link to="/login" className="text-primary hover:underline">
+              Masuk
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
