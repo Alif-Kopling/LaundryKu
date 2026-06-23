@@ -254,7 +254,7 @@ docs: add API documentation
 | Role | Nama |
 |------|------|
 | **Frontend Developer** | Alif Kopling |
-| **Backend Developer** | — |
+| **Backend Developer** | Todzxx |
 
 ---
 
