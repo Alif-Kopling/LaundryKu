@@ -73,7 +73,7 @@ export default function Dashboard() {
     const data = JSON.parse(localStorage.getItem("transactions") || "[]")
     return data
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-.slice(0, 8)
+.slice(0, 7)
   }, [])
 
   const cards = [
