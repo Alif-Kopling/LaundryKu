@@ -7,6 +7,7 @@ import Dashboard from "@/pages/Dashboard"
 import Customers from "@/pages/Customers"
 import Transactions from "@/pages/Transactions"
 import Invoice from "@/pages/Invoice"
+import History from "@/pages/History"
 
 export default function AppRoutes() {
   return (
@@ -24,7 +25,7 @@ export default function AppRoutes() {
         <Route path="/customers" element={<Customers />} />
         <Route path="/transactions" element={<Transactions />} />
         <Route path="/invoice" element={<Invoice />} />
-        <Route path="/history" element={<div>Riwayat</div>} />
+        <Route path="/history" element={<History />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
