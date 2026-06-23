@@ -28,13 +28,17 @@ Dengan LaundryKu, proses pencatatan laundry yang sebelumnya manual dapat dilakuk
 
 ## 📸 Screenshot
 
-<p align="center">
-  <img src="frontend/public/docs/login.png" width="48%" alt="Login">
-  <img src="frontend/public/docs/Dashboard.png" width="48%" alt="Dashboard">
-  <br>
-  <img src="frontend/public/docs/Member.png" width="48%" alt="Member">
-  <img src="frontend/public/docs/transaksi.png" width="48%" alt="Transaksi">
-</p>
+<div align="center">
+
+| Login | Dashboard |
+|:---:|:---:|
+| ![Login](frontend/public/docs/login.png) | ![Dashboard](frontend/public/docs/Dashboard.png) |
+
+| Data Member | Transaksi |
+|:---:|:---:|
+| ![Member](frontend/public/docs/Member.png) | ![Transaksi](frontend/public/docs/transaksi.png) |
+
+</div>
 
 ---
 
